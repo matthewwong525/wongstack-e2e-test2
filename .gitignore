@@ -1,0 +1,9 @@
+.DS_Store
+*.log
+node_modules/
+.claude/settings.local.json
+
+# Real secrets — the committed template is .env.example. Never commit filled-in values.
+.env
+.env.local
+.dev.vars
