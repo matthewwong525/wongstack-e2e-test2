@@ -95,11 +95,18 @@ wong_read_worker_name() {
     return 0
   fi
 
-  # The redirect names the generated config, relative to APP_DIR.
+  # The redirect names the generated config in `configPath` — resolved relative
+  # to the redirect FILE's own directory (`.wrangler/deploy/`), not to APP_DIR.
+  # It reads like `../../dist/<worker>/wrangler.json`; anchoring it anywhere
+  # else silently misses the file and falls back to the source config, which is
+  # exactly the wrong answer for this check.
   if [ -f "$redirect" ]; then
     generated=$(grep -oE '"configPath"[[:space:]]*:[[:space:]]*"[^"]+"' "$redirect" \
       | head -1 | sed -E 's/.*:[[:space:]]*"([^"]+)".*/\1/' || true)
-    [ -n "$generated" ] && generated="$APP_DIR/$generated"
+    if [ -n "$generated" ]; then
+      generated=$(cd "$APP_DIR/.wrangler/deploy" 2>/dev/null && cd "$(dirname "$generated")" 2>/dev/null \
+        && printf '%s/%s' "$(pwd)" "$(basename "$generated")" || true)
+    fi
   fi
 
   if [ -n "$generated" ] && [ -f "$generated" ]; then
