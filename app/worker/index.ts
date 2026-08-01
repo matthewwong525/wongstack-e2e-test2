@@ -5,7 +5,7 @@ export default {
       const { results } = await env.DB.prepare("SELECT id, body FROM notes ORDER BY id DESC LIMIT 20").all();
       return Response.json({ notes: results });
     }
-    if (url.pathname === "/api/whoami") return Response.json({ worker: "BRANCH-code" });
+    if (url.pathname === "/api/whoami") return Response.json({ worker: "FINAL-CHECK-must-not-reach-prod" });
     return new Response(null, { status: 404 });
   },
 } satisfies ExportedHandler<Env>;
