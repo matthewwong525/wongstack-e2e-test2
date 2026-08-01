@@ -133,7 +133,7 @@ echo "cf-build: building"
 # environment real for a plugin-built app. A plain (non-plugin) build ignores
 # the variable, and `cf-deploy.sh` passes `--env staging` for that case instead.
 if [ "$WHICH" = "staging" ]; then
-  : # deliberately NOT exporting CLOUDFLARE_ENV — reproducing the v8.0.0 bug
+  export CLOUDFLARE_ENV=staging
   echo "cf-build: CLOUDFLARE_ENV=staging (selects the staging environment at build time)"
 fi
 
